@@ -43,7 +43,7 @@ try:
     
     Highdriver4_init()  #Initialize highdriver4 and have Powermode register set 
     
-    platformWeight()
+    platformWeight(True)
     
     while True:  #main loop
         
@@ -68,6 +68,7 @@ try:
             sleep(1)
             
         elif p1Clean or p2Clean or p3Clean:  #Checks for other pins for cleaning
+            i2cbus.write_byte_data(I2C_HIGHDRIVER_ADRESS, I2C_POWERMODE, 0x01) #Pumps active
             Highdriver4_setfrequency(200)    #Different frequency for cleaning or priming
             
             cleaningDone = True #Resetting other flags
@@ -83,8 +84,9 @@ try:
                     Highdriver4_setvoltage(2, 0)
                     Highdriver4_setvoltage(3, 0)
                     
-                    print('Cleaning Pump 1!\n')
                     readRegisters()
+                    print('Cleaning Pump 1!\n')
+                
             elif p2Clean: 
                 if not p2cf: #Only run when rotary switch first  selected this
                     p1cf = False #Resetting other flags
@@ -130,7 +132,7 @@ except (KeyboardInterrupt, SystemExit):  #Terminate program with CTRL + C
     print('Bye :)')
     
     Highdriver4_init()  #Set all registers to default
-    i2cbus.write_byte_data(I2C_HIGHDRIVER_ADRESS, I2C_POWERMODE, 0x00) #Turn off highdriver4
+    i2cbus.write_byte_data(I2C_HIGHDRIVER_ADRESS, I2C_POWERMODE, 0x00) #Highdriver4 pumps inactive
     
 finally:
     GPIO.cleanup()  #resets any ports you have used in this program back to input mode
