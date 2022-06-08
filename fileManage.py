@@ -2,17 +2,19 @@
 #----------------------------------------------------------------------------
 # Created By  : Pedro V Quijano Carde 
 # Created Date: 06/01/2022
-# Revision ='1.0' Add all modules currently used and make a simple script to
-#                 use the rotary switch, pumps, and load cell.
+# Revision = '1.1' Checks for the data directory and creates it if there is none 
+# Revision ='1.0'
 # ---------------------------------------------------------------------------
 """ This script stores a text file
     -storeEvent(timeStamp, fileName, data)
         -timestamp: includes the time in the file name, done outside with
                     strftime("%Y-%m-%d_%H:%M:%S")
+                    
         -filename: includes a string to the file name
+        
         -data: this is what will be stored in the text file, can be integers,
-        , floating numbers, strings. For multiple inputs include them inside
-        a list [var1, str1]. Format with \t and \n to import as csv later.
+               floating numbers, strings. For multiple inputs include them inside
+               a list [var1, str1]. Format with \t and \n to import as delimited csv.
 """
 # ---------------------------------------------------------------------------
 
@@ -20,10 +22,19 @@ import os
 
 # ---------------------------------------------------------------------------
 
-def storeEvent(timeStamp, fileName, data):
-    parentPath = os.path.dirname(__file__) #This is to get the current working directory, this way you can put the main script anywere you like (in this case the only requirement is to have a Data folder in the same directory as the script
-    print(parentPath + '\n')
+parentPath = os.path.dirname(__file__) #Get current working directory,
+                                       #this way you can put the main script anywere you like
+                                       #(in this case the only requirement is to have a Data
+                                       #folder in the same directory as the script
+
+try:
+    os.mkdir(parentPath + '/Data/') #Attempt to make the directory Data
     
-    file1 = open(r"" + parentPath + "/Data/" +  timeStamp + "__" + fileName + ".txt","a")
+except OSError as error:
+    pass #Do nothing if the directory is already there
+
+def storeEvent(timeStamp, fileName, data):
+    
+    file1 = open(r"" + parentPath + '/Data/' +  timeStamp + '__' + fileName + '.txt',"a")
     file1.writelines(data)
     file1.close()
