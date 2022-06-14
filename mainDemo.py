@@ -1,7 +1,7 @@
 #!/usr/bin/env python3  
 #----------------------------------------------------------------------------
 # Created By  : Pedro V Quijano Carde 
-# Created Date: 06/01/2022
+# Created Date: 05/31/2022
 # Revision ='1.0' Add all modules currently used and make a simple script to
 #                 use the rotary switch, pumps, and load cell.
 # ---------------------------------------------------------------------------
@@ -9,10 +9,11 @@
 shrew box. """
 # ---------------------------------------------------------------------------
 
-from time import strftime, perf_counter, sleep
+from time import strftime, perf_counter, perf_counter_ns, sleep
 
 # ---------------------------------------------------------------------------
- 
+
+from capTouch import *
 from fileManage import *
 from platformWeight import *
 from pumpLib import *
@@ -23,7 +24,14 @@ from weightLib import *
 
 # ---------------------------------------------------------------------------
 
+global timeStart
+timeStart = perf_counter_ns()
+
 try:
+        
+    timeStamp = strftime("%Y-%m-%d_%H:%M:%S")  #String that contains the date in YYYY-MM-DD_HH:MM:SS format
+    fileName = "test"
+    storeEvent(timeStamp, fileName, ['Event Time,', 'Event,', 'Details', '\n'])
         
     pSW = False   #Flags for determining which position the rotary switch is in
     p1Clean = False
@@ -35,11 +43,6 @@ try:
     nosel = False  #Flag for having the pumps turned off only once when no valid position is selected on rotary switch
     cleaningDone = True #Flag to re-initialize the pumps after cleaning, set to true for first 
     weightM = 0
-    
-    timeStamp = strftime("%Y-%m-%d_%H:%M:%S")  #String that contains the date in YYYY-MM-DD_HH:MM:SS format
-    fileName = "test"
-    
-    storeEvent(timeStamp, fileName, ["Test string"])
     
     Highdriver4_init()  #Initialize highdriver4 and have Powermode register set 
     
@@ -54,7 +57,7 @@ try:
             if cleaningDone:   #Only run when rotary switch first  selected pSW
                 cleaningDone = False  #Will not run this if statement if the rotary switch stays on this position
                 p1cf = False   #Resetting other flags
-                p2vf = False
+                p2cf = False
                 p3cf = False
                 nosel = False
                 Highdriver4_setfrequency(100)     #Frequency for dispensing liquids

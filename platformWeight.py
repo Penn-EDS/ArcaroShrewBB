@@ -37,6 +37,7 @@ def platformWeight(zeroing = False):
     
     #maxOut = int()
     maxr = int()  #variable to return current max number
+    numOutCheck = 0  #variable to store weight measured
     numOut = int()  #variable to store weight measured
     bucketPass = int() #Variable to pass numOut - lowerlim
     lowerlim = 100  #Weight Lower Limit that will be considered for Maxbucket
@@ -56,27 +57,30 @@ def platformWeight(zeroing = False):
         bucket.pop(limrange + 1)    #placeholder for when no max num has been picked
         bucket.insert(limrange + 1, 1)
     
-    numOut = int(weight()) - zero
+    #Check if weight is a number and not a boolean value
+    numOutCheck = weight()
+    if type(numOutCheck) == float:
+        numOut = int(numOutCheck) - zero
     
-    if (numOut > 0):  #Make sure the weight is positive
-        print('Weight: ', numOut)
-    else:
-        print('Weight: ', 0)   # Sometimes it rounds up to -1
-        numOut = 0
+        if (numOut > 0):  #Make sure the weight is positive
+            print('Weight: ', numOut)
+        else:
+            print('Weight: ', 0)   # Sometimes it rounds up to -1
+            numOut = 0
         
-    if (numOut >= lowerlim and numOut <= upperlim): #Only consider weight inside the limrange
-        bucketPass = bucket[numOut - lowerlim]  #Take the tally of the weight (index)
-        bucket.pop(numOut - lowerlim)  #Add one to the tally
-        bucket.insert(numOut - lowerlim, bucketPass + 1)  #Add one to the tally
+        if (numOut >= lowerlim and numOut <= upperlim): #Only consider weight inside the limrange
+            bucketPass = bucket[numOut - lowerlim]  #Take the tally of the weight (index)
+            bucket.pop(numOut - lowerlim)  #Add one to the tally
+            bucket.insert(numOut - lowerlim, bucketPass + 1)  #Add one to the tally
             
-    maxBucket = max(bucket)  #Returns the largest tally
-    maxBucketIndex = [index for index in range(len(bucket)) if bucket[index] == maxBucket] #Searches for all instances of maxbucket in bucket, and returns the one in the highest index
+        maxBucket = max(bucket)  #Returns the largest tally
+        maxBucketIndex = [index for index in range(len(bucket)) if bucket[index] == maxBucket] #Searches for all instances of maxbucket in bucket, and returns the one in the highest index
         
-    if (maxBucketIndex[-1] == limrange + 1): #for when no maximum number has been selected
-        print('Max: ', 0)
-    else:
-        maxr = maxBucketIndex[-1] + lowerlim 
-        print('Max: ', maxr)
+        if (maxBucketIndex[-1] == limrange + 1): #for when no maximum number has been selected
+            print('Max: ', 0)
+        else:
+            maxr = maxBucketIndex[-1] + lowerlim 
+            print('Max: ', maxr)
         
         
             

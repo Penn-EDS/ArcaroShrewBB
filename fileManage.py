@@ -33,8 +33,8 @@ try:
 except OSError as error:
     pass #Do nothing if the directory is already there
 
-def storeEvent(timeStamp, fileName, data):
+def storeEvent(time_Stamp, file_Name, data):
     
-    file1 = open(r"" + parentPath + '/Data/' +  timeStamp + '__' + fileName + '.txt',"a")
+    file1 = open(r"" + parentPath + '/Data/' +  time_Stamp + '__' + file_Name + '.txt',"a")
     file1.writelines(data)
     file1.close()
