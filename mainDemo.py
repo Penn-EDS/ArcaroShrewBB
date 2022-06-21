@@ -19,6 +19,7 @@ from platformWeight import *
 from pumpLib import *
 from pumpTimeWrap import *
 from rotSwitch import *
+from test import *
 from weightLib import *
 
 
@@ -41,9 +42,10 @@ try:
     testScript = False 
     p1cf = False  #Flag for having the corresponding pump turned on only once (send the command)
     p2cf = False
-    p3cf = False 
+    p3cf = False
+    testcf = False 
     nosel = False  #Flag for having the pumps turned off only once when no valid position is selected on rotary switch
-    cleaningDone = True #Flag to re-initialize the pumps after cleaning, set to true for first 
+    cleaningDone = True #Flag to re-initialize the pumps after cleaning, set to true for first
     weightM = 0
     
     Highdriver4_init()  #Initialize highdriver4 and have Powermode register set 
@@ -62,6 +64,7 @@ try:
                 p2cf = False
                 p3cf = False
                 nosel = False
+                testcf = True
                 Highdriver4_setfrequency(100)     #Frequency for dispensing liquids
                 Highdriver4_init()
                 readRegisters()
@@ -78,13 +81,29 @@ try:
             #print(weightM)
             sleep(3)
         elif testScript:
-            pass
+            if testcf:
+                cleaningDone = True  
+                p1cf = False   #Resetting other flags
+                p2cf = False
+                p3cf = False
+                nosel = False
+                testcf = False
+                
+                Highdriver4_setfrequency(100)     #Frequency for test script default (may be changed from other functions within
+                Highdriver4_init()
+                readRegisters()
+                print("Test Script Running!\n")
+            
+            testFunc()
+            
+            sleep(1)
         
         elif p1Clean or p2Clean or p3Clean:  #Checks for other pins for cleaning
             i2cbus.write_byte_data(I2C_HIGHDRIVER_ADRESS, I2C_POWERMODE, 0x01) #Pumps active
             Highdriver4_setfrequency(50)    #Different frequency for cleaning or priming
             
             cleaningDone = True #Resetting other flags
+            testcf = True
             nosel = False
             
             if p1Clean:
@@ -136,6 +155,7 @@ try:
                 p2vf = False
                 p3cf = False
                 nosel = True
+                testcf = True
                 
                 readRegisters()
                 print("No pumps selected, highdriver off\n")
