@@ -5,7 +5,9 @@
 # Revision ='1.0' 
 # ---------------------------------------------------------------------------
 """ This is a wrapper funtion for the weightLib function. It zeros the weight
-    cell at the first call of the function, or when passing True as an argument.
+    cell at the first call of the function, or when passing True as an argumen.
+    There is a zero function in the HX711 library but did not seem to work at
+    the time. Maybe in the future.
     Make sure there is nothing on the platform when first calling the function.
     Returns weight in grams and the most frequent maximum weight between 100
     and 400 grams.

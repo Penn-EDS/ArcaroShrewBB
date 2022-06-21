@@ -42,7 +42,7 @@ try:
         print('Pad2 is ', p2State)
         print('Pad3 is ', p3State)
         print('\n')
-        sleep(1)
+        sleep(.05)
         
 except (KeyboardInterrupt, SystemExit):
     print('Bye :)')

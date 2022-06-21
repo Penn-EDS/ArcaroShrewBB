@@ -37,8 +37,10 @@ try:
     p1Clean = False
     p2Clean = False
     p3Clean = False
+    standby = False
+    testScript = False 
     p1cf = False  #Flag for having the corresponding pump turned on only once (send the command)
-    p2vf = False
+    p2cf = False
     p3cf = False 
     nosel = False  #Flag for having the pumps turned off only once when no valid position is selected on rotary switch
     cleaningDone = True #Flag to re-initialize the pumps after cleaning, set to true for first 
@@ -50,7 +52,7 @@ try:
     
     while True:  #main loop
         
-        pSW, p1Clean, p2Clean, p3Clean = rotSwitchState()   #Read the GPIO pin's current state of the rotary switch
+        standby, p1Clean, p2Clean, p3Clean, testScript, pSW = rotSwitchState()   #Read the GPIO pin's current state of the rotary switch
         
         if pSW:  #Pumps run with software
             
@@ -66,13 +68,21 @@ try:
                 print("Pumps working normally\n")
                 
             platformWeight()
+            timedPump(1, 250, 0.2)
+            sleep(0.5)
+            timedPump(2, 250, 0.2)
+            sleep(0.5)
+            timedPump(3, 250, 0.2)
+            sleep(0.5)
             #weightM = weight()  #Get current weight on platform
             #print(weightM)
-            sleep(1)
-            
+            sleep(3)
+        elif testScript:
+            pass
+        
         elif p1Clean or p2Clean or p3Clean:  #Checks for other pins for cleaning
             i2cbus.write_byte_data(I2C_HIGHDRIVER_ADRESS, I2C_POWERMODE, 0x01) #Pumps active
-            Highdriver4_setfrequency(200)    #Different frequency for cleaning or priming
+            Highdriver4_setfrequency(50)    #Different frequency for cleaning or priming
             
             cleaningDone = True #Resetting other flags
             nosel = False
@@ -83,7 +93,7 @@ try:
                     p2cf = False
                     p3cf = False
                     
-                    Highdriver4_setvoltage(1, 240)
+                    Highdriver4_setvoltage(1, 250)
                     Highdriver4_setvoltage(2, 0)
                     Highdriver4_setvoltage(3, 0)
                     
@@ -97,7 +107,7 @@ try:
                     p3cf = False
                     
                     Highdriver4_setvoltage(1, 0)
-                    Highdriver4_setvoltage(2, 240)
+                    Highdriver4_setvoltage(2, 250)
                     Highdriver4_setvoltage(3, 0)
                     
                     readRegisters()
@@ -111,7 +121,7 @@ try:
                     
                     Highdriver4_setvoltage(1, 0)
                     Highdriver4_setvoltage(2, 0)
-                    Highdriver4_setvoltage(3, 240)
+                    Highdriver4_setvoltage(3, 250)
                     
                     readRegisters()
                     print('Cleaning Pump 3!\n')
@@ -132,7 +142,7 @@ try:
             
 
 except (KeyboardInterrupt, SystemExit):  #Terminate program with CTRL + C
-    print('Bye :)')
+    print('Bye ;)')
     
     Highdriver4_init()  #Set all registers to default
     i2cbus.write_byte_data(I2C_HIGHDRIVER_ADRESS, I2C_POWERMODE, 0x00) #Highdriver4 pumps inactive

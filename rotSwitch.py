@@ -20,16 +20,22 @@ GPIO.setup(5, GPIO.IN)  #Sets up GPIO as input or output
 GPIO.setup(6, GPIO.IN)
 GPIO.setup(12, GPIO.IN)
 GPIO.setup(13, GPIO.IN)
+GPIO.setup(16, GPIO.IN)
+GPIO.setup(19, GPIO.IN)
 
 st1 = False  #Variable to store the pins state
 st2 = False
 st3 = False
 st4 = False
+st5 = False
+st6 = False
 
 def rotSwitchState():
-    st1 = GPIO.input(5)  #Read GPIO pin state
-    st2 = GPIO.input(6)
-    st3 = GPIO.input(12)
-    st4 = GPIO.input(13)
+    st1 = GPIO.input(19)  #Read GPIO pin state, ordered from position 1 (leftmost) to position 6.
+    st2 = GPIO.input(16)
+    st3 = GPIO.input(13)
+    st4 = GPIO.input(12)
+    st5 = GPIO.input(6)
+    st6 = GPIO.input(5)
     
-    return st1, st2, st3, st4  #Return the GPIO pin state in order 
+    return st1, st2, st3, st4, st5, st6  #Return the GPIO pin state in order 
