@@ -67,8 +67,8 @@ Not hardware related. fileManage.py stores a text file.
 
    - storeEvent(timeStamp, fileName, data)
 
-   - timestamp: includes the time in the file name, done outside with strftime("%Y-%m-%d_%H:%M:%S")
+        - timestamp: includes the time in the file name, done outside with strftime("%Y-%m-%d_%H:%M:%S")
                     
-   - filename: includes a string to the file name
+        - filename: includes a string to the file name
         
-   - data: this is what will be stored in the text file, can be integers, floating numbers, strings. For multiple inputs include them inside a list [var1, str1]. Format with \t and \n to import as delimited csv.
+        - data: this is what will be stored in the text file, can be integers, floating numbers, strings. For multiple inputs include them inside a list        [var1, str1]. Format with \t and \n to import as delimited csv.
