@@ -11,7 +11,7 @@ The weightLib.py script handles the communication between the Raspberry Pi and t
 
 The platformWeight.py script is a wrapper function for the weightLib function. It zeros the weight cell at the first call of the function, or when passing True as an argumen. There is a zero function in the HX711 library but did not seem to work at the time. Maybe in the future. Make sure there is nothing on the platform when first calling the function. Returns weight in grams and the most frequent maximum weight between 100 and 400 grams.
     
-    -platformWeight() returns a weight in grams. If the swab file is not created
+    - platformWeight() returns a weight in grams. If the swab file is not created
     the user is prompted to do so by calibrating the load cell.
     
     1. Before running the script make sure nothing is on the weight platform
